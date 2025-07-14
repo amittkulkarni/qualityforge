@@ -1,0 +1,205 @@
+review:
+  description: |
+    Analyze the provided Python files for code quality issues using both AST parsing and pylint analysis.
+    
+    Your tasks:
+    1. Parse each Python file using the AST parser to extract metrics and identify:
+       - Cyclomatic complexity > 15
+       - Dead/unreachable code
+       - Duplicate code blocks
+       - Long functions/classes
+       - Poor naming conventions
+    
+    2. Run pylint analysis on each file to identify:
+       - Code smells
+       - Style violations
+       - Potential bugs
+       - Security issues
+       - Import problems
+    
+    3. Prioritize issues by severity and impact
+    4. Focus on actionable improvements that enhance maintainability
+    5. Provide specific line numbers and detailed explanations
+    
+    Context: {context}
+    
+    Generate a comprehensive analysis report with:
+    - File-by-file breakdown of issues
+    - Severity classifications (critical, high, medium, low)
+    - Specific line numbers and code snippets
+    - Recommended refactoring approaches
+    - Overall quality score and metrics
+  
+  expected_output: |
+    A detailed JSON report containing:
+    ```json
+    {
+      "analysis_summary": {
+        "total_files": int,
+        "total_issues": int,
+        "critical_issues": int,
+        "high_issues": int,
+        "medium_issues": int,
+        "low_issues": int,
+        "overall_score": float
+      },
+      "files_analyzed": [
+        {
+          "file_path": "string",
+          "file_size": int,
+          "lines_of_code": int,
+          "complexity_score": float,
+          "issues": [
+            {
+              "type": "string",
+              "severity": "critical|high|medium|low",
+              "line_number": int,
+              "column": int,
+              "message": "string",
+              "rule": "string",
+              "suggestion": "string"
+            }
+          ],
+          "metrics": {
+            "cyclomatic_complexity": float,
+            "maintainability_index": float,
+            "code_to_comment_ratio": float
+          }
+        }
+      ],
+      "recommendations": ["string"]
+    }
+    ```
+
+refactor:
+  description: |
+    Based on the code review analysis, generate high-quality unified diff patches to fix the identified issues.
+    
+    Your tasks:
+    1. Analyze the review findings and prioritize fixes that provide maximum benefit
+    2. Generate precise unified diff patches for each file that needs changes
+    3. Ensure patches:
+       - Fix complexity issues by breaking down large functions
+       - Remove dead code safely
+       - Improve naming conventions
+       - Address pylint violations
+       - Maintain backward compatibility
+       - Preserve existing functionality
+    
+    4. Test patches mentally for correctness and safety
+    5. Add explanatory comments where beneficial
+    6. Follow Python best practices and PEP 8 guidelines
+    
+    Focus on:
+    - Function/method decomposition for complex code
+    - Variable and function renaming for clarity
+    - Import organization and cleanup
+    - Documentation improvements
+    - Type hints addition where beneficial
+    - Performance optimizations that don't compromise readability
+    
+    Context: Review analysis from previous task
+    
+    Generate unified diff patches that are safe, effective, and improve code quality.
+  
+  expected_output: |
+    A JSON response containing unified diff patches:
+    ```json
+    {
+      "patches": [
+        {
+          "file_path": "string",
+          "original_issues": ["string"],
+          "patch_content": "string (unified diff format)",
+          "description": "string",
+          "impact": "string",
+          "safety_level": "safe|moderate|risky",
+          "lines_added": int,
+          "lines_removed": int,
+          "complexity_improvement": float
+        }
+      ],
+      "summary": {
+        "total_patches": int,
+        "files_modified": int,
+        "estimated_quality_improvement": float,
+        "potential_risks": ["string"],
+        "testing_recommendations": ["string"]
+      }
+    }
+    ```
+
+git_operations:
+  description: |
+    Create a new git branch, apply the generated patches, commit changes, and open a pull request with detailed inline comments.
+    
+    Your tasks:
+    1. Create a new git branch with timestamp: qualityforge/YYYYMMDD-HHMMSS
+    2. Apply each patch safely to the corresponding files
+    3. Verify patches apply correctly without conflicts
+    4. Stage and commit changes with meaningful commit messages
+    5. Push the branch to remote repository
+    6. Create a pull request with:
+       - Descriptive title
+       - Detailed description of changes
+       - Inline comments explaining specific improvements
+       - Quality metrics comparison
+    
+    Safety checks:
+    - Verify all patches apply cleanly
+    - Check that modified files are syntactically valid Python
+    - Ensure no merge conflicts exist
+    - Backup original files before applying patches
+    
+    PR requirements:
+    - Clear title indicating automated quality improvements
+    - Comprehensive description with before/after metrics
+    - File-by-file breakdown of changes
+    - Inline comments on significant modifications
+    - Testing recommendations for reviewers
+    
+    Context: Patches from previous refactor task
+    
+    Execute git operations safely and create a professional pull request.
+  
+  expected_output: |
+    A JSON response with git operation results:
+    ```json
+    {
+      "git_operations": {
+        "branch_created": "string",
+        "files_modified": ["string"],
+        "commit_hash": "string",
+        "patches_applied": int,
+        "patches_failed": int
+      },
+      "pull_request": {
+        "url": "string",
+        "number": int,
+        "title": "string",
+        "description": "string",
+        "inline_comments": int,
+        "reviewers": ["string"]
+      },
+      "quality_metrics": {
+        "before": {
+          "total_issues": int,
+          "complexity_score": float,
+          "maintainability_index": float
+        },
+        "after": {
+          "total_issues": int,
+          "complexity_score": float,
+          "maintainability_index": float
+        },
+        "improvement": {
+          "issues_fixed": int,
+          "complexity_reduction": float,
+          "maintainability_improvement": float
+        }
+      },
+      "status": "success|partial|failed",
+      "errors": ["string"],
+      "warnings": ["string"]
+    }
+    ```
